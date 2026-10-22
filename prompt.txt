@@ -1,0 +1,17 @@
+Richiesta:
+Sviluppa una soluzione web per il calcolo dell'Indice di Massa Corporea (BMI) utilizzando HTML, CSS e PHP, strutturata secondo le seguenti indicazioni tecniche. La risposta deve includere sia il codice sorgente suddiviso per i singoli file sia un'anteprima interattiva ed eseguibile integrata in un unico file.
+Specifiche dei File
+File form.html
+Il file deve contenere un heading principale h1 con testo "Calcolatore BMI" e un modulo form configurato con method="post" e action="bmi.php". Il form deve includere tre campi obbligatori (required) affiancati dalle rispettive label: Nome utente di tipo text, Peso espresso in kg di type="number" con decimali consentiti tramite step="0.1", e Altezza espressa in cm di type="number". Infine, deve presente un bottone di invio button con la scritta "Calcola".
+File stile.css (Foglio di stile unico)
+La pagina deve avere sfondo #F1F3F5, colore del testo principale #1F2328 e font sans-serif, con un layout centrato sia in verticale sia in orizzontale. Il contenitore/card principale deve avere sfondo bianco (#ffffff), larghezza fissa di 360px, padding di 24px, bordi arrotondati a 12px e un'ombra tenue (box-shadow). Il pulsante deve avere sfondo #1F2328, testo bianco, bordi arrotondati a 6px e larghezza al 100%.
+File bmi.php
+Lo script deve estrarre i dati inviati tramite POST (nome, peso, altezza) e calcolare il valore BMI applicando la formula peso diviso altezza in metri al quadrato. Deve poi generare un elemento card che combina la classe base .card con la classe specifica per la fascia di peso rilevata (ad esempio div class="card normopeso"). All'interno della card vanno mostrati il nome dell'utente, i parametri inseriti (es. "Peso 70 kg - Altezza 178 cm"), il valore numerico del BMI arrotondato a due decimali (font 48px in grassetto) e la denominazione della categoria in lettere maiuscole (es. NORMOPESO). Al di sotto della card deve essere inserito un link "Calcola di nuovo" indirizzato a form.html.
+Stilizzazione delle 4 Categorie di BMI
+Ogni classe prevede un bordo solido da 3px e il testo del nome della fascia dello stesso colore del bordo.
+Per BMI minore di 18.5 usa la classe .sottopeso con sfondo #E3EEF9, bordo e testo #2F6F92.
+Per BMI tra 18.5 e 24.9 usa la classe .normopeso con sfondo #E3F4E6, bordo e testo #256D34.
+Per BMI tra 25.0 e 29.9 usa la classe .sovrappeso con sfondo #FCE8D7, bordo e testo #9A4F06.
+Per BMI maggiore o uguale a 30.0 usa la classe .obesita con sfondo #F86262, bordo e testo #832020.
+Formato di Output Richiesto
+Fornisci separatamente e in modo ordinato il codice pulito per form.html, stile.css e bmi.php, seguito dalla demo interattiva completa e funzionante direttamente in anteprima.

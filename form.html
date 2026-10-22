@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore BMI</title>
+    <link rel="stylesheet" href="stile.css">
+</head>
+<body>
+    <div class="card">
+        <h1>Calcolatore BMI</h1>
+        <form method="post" action="bmi.php">
+            <div class="form-group">
+                <label for="nome">Nome utente</label>
+                <input type="text" id="nome" name="nome" required placeholder="Inserisci il tuo nome">
+            </div>
+            
+            <div class="form-group">
+                <label for="peso">Peso (kg)</label>
+                <input type="number" id="peso" name="peso" step="0.1" min="1" required placeholder="Es. 70.5">
+            </div>
+            
+            <div class="form-group">
+                <label for="altezza">Altezza (cm)</label>
+                <input type="number" id="altezza" name="altezza" min="1" required placeholder="Es. 175">
+            </div>
+            
+            <button type="submit">Calcola</button>
+        </form>
+    </div>
+</body>
+</html>
