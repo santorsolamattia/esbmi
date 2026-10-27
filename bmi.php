@@ -1,16 +1,38 @@
 <?php
-// Estrazione e pulizia dei dati inviati tramite POST
-$nome = isset($_POST['nome']) ? htmlspecialchars(trim($_POST['nome'])) : '';
-$peso = isset($_POST['peso']) ? floatval($_POST['peso']) : 0;
-$altezza_cm = isset($_POST['altezza']) ? floatval($_POST['altezza']) : 0;
 
-// Validazione ed elaborazione del BMI
-if ($peso > 0 && $altezza_cm > 0) {
-    $altezza_m = $altezza_cm / 100;
-    $bmi = $peso / ($altezza_m * $altezza_m);
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    header("Location: form.html");
+    exit();
+}
+
+
+$ip_address = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'UNKNOWN_IP';
+$data_ora = date('d/m/Y,H:i:s');
+
+$raw_nome = isset($_POST['nome']) ? $_POST['nome'] : '';
+$raw_peso = isset($_POST['peso']) ? $_POST['peso'] : '';
+$raw_altezza = isset($_POST['altezza']) ? $_POST['altezza'] : '';
+
+
+$nome_valido = !empty($raw_nome) && trim($raw_nome) !== '';
+$peso_valido = is_numeric($raw_peso) && (float)$raw_peso > 0;
+$altezza_valida = is_numeric($raw_altezza) && (float)$raw_altezza > 0;
+
+
+$dati_validi = $nome_valido && $peso_valido && $altezza_valida;
+
+
+$log_nome = $nome_valido ? htmlspecialchars(trim($raw_nome)) : 'NOT_VALID';
+$log_altezza = $altezza_valida ? (float)$raw_altezza : 'NOT_VALID';
+$log_peso = $peso_valido ? (float)$raw_peso : 'NOT_VALID';
+
+if ($dati_validi) {
+    
+    $altezza_m = $log_altezza / 100;
+    $bmi = $log_peso / ($altezza_m * $altezza_m);
     $bmi_formatted = number_format($bmi, 2, '.', '');
 
-    // Determinazione della fascia di peso
+    
     if ($bmi < 18.5) {
         $classe_bmi = "sottopeso";
         $categoria = "SOTTOPESO";
@@ -24,8 +46,28 @@ if ($peso > 0 && $altezza_cm > 0) {
         $classe_bmi = "obesita";
         $categoria = "OBESITÀ";
     }
+
+    $log_bmi = $bmi_formatted;
+    $log_class = $categoria;
 } else {
-    // In caso di dati non validi
+    $log_bmi = 'NOT_VALID';
+    $log_class = 'NOT_VALID';
+}
+
+$log_line = sprintf(
+    "%s,%s,%s,%s,%s,%s,%s\n",
+    $data_ora,
+    $ip_address,
+    $log_nome,
+    $log_altezza,
+    $log_peso,
+    $log_bmi,
+    $log_class
+);
+
+file_put_contents('log.csv', $log_line, FILE_APPEND | LOCK_EX);
+
+if (!$dati_validi) {
     header("Location: form.html");
     exit();
 }
@@ -41,10 +83,10 @@ if ($peso > 0 && $altezza_cm > 0) {
 <body>
     <div class="result-wrapper" style="text-align: center;">
         <div class="card <?php echo $classe_bmi; ?>">
-            <div class="user-name"><?php echo $nome; ?></div>
-            <div class="user-params">Peso <?php echo $peso; ?> kg - Altezza <?php echo $altezza_cm; ?> cm</div>
-            <div class="bmi-value"><?php echo $bmi_formatted; ?></div>
-            <div class="bmi-category"><?php echo $categoria; ?></div>
+            <div class="user-name"><?php echo $log_nome; ?></div>
+            <div class="user-params">Peso <?php echo $log_peso; ?> kg - Altezza <?php echo $log_altezza; ?> cm</div>
+            <div class="bmi-value"><?php echo $log_bmi; ?></div>
+            <div class="bmi-category"><?php echo $log_class; ?></div>
         </div>
         <a href="form.html" class="reset-link">Calcola di nuovo</a>
     </div>
